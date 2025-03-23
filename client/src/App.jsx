@@ -10,6 +10,9 @@ import { useAuthStore } from "./store/useAuthStore";
 import { useThemeStore } from "./store/useThemeStore";
 import { LoaderCircle } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import BlockedUserPage from "./pages/BlockedUserPage";
+import FindFriends from "./pages/FindFriends";
+import FriendRequests from "./pages/FriendRequests";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -37,6 +40,9 @@ function App() {
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/signup" element={!authUser ? <SignupPage /> : <Navigate to="/" />} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
+        <Route path="/blocklist" element={authUser ? <BlockedUserPage /> : <Navigate to="/login" />} />
+        <Route path="/friendRequests" element={authUser ? <FriendRequests /> : <Navigate to="/login" />} />
+        <Route path="/explore" element={authUser ? <FindFriends /> : <Navigate to="/login" />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>

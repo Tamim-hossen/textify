@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
-import { LogOut, MessageCircleMore, Settings, User } from "lucide-react";
+import { Search, MessageCircleMore, Settings, Users,Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const { logout, authUser } = useAuthStore();
-  const{setSelectedUser} = useChatStore()
+  const { authUser } = useAuthStore();
+ const {getRequests,receivedFriendRequests,isUsersLoading,setSelectedUser} = useChatStore()
+
+ 
+ useEffect(()=>{
+  getRequests()
+ },[])
 
   return (
     <header
@@ -24,30 +30,40 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
+          {authUser && (
+              <div className="flex flex-row gap-1">
+                <Link
+              to={"/FriendRequests"}
+              className={`btn btn-sm gap-2 transition-colors`}
+              onClick={()=>{setSelectedUser(null)}}
+            >
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">Requests</span>
+              {isUsersLoading ? <span> <Loader2 size = {14}className="animate-spin"/></span>:<span>{receivedFriendRequests.length}</span>}
+
+            </Link>
+            <Link
+              to={"/explore"}
+              className={`btn btn-sm gap-2 transition-colors`}
+              onClick={()=>{setSelectedUser(null)}}
+            >
+              <Search className="w-4 h-4" />
+              <span className="hidden sm:inline">Search</span>
+            </Link>
+              </div>
+            )}
+
+
             <Link
               to={"/settings"}
-              className={`
-              btn btn-sm gap-2 transition-colors
-              
-              `}
+              className={`btn btn-sm gap-2 transition-colors `}
+              onClick={()=>{setSelectedUser(null)}}
             >
               <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">Settings</span>
+              <span className="hidden sm:inline">Options</span>
             </Link>
 
-            {authUser && (
-              <>
-                <Link to={"/profile"} className={`btn btn-sm gap-2`}>
-                  <User className="size-5" />
-                  <span className="hidden sm:inline">Profile</span>
-                </Link>
-
-                <button className="flex gap-2 items-center btn-sm btn" onClick={()=>{setSelectedUser(null);logout()}}>
-                  <LogOut className="size-5" />
-                  <span className="hidden sm:inline">Logout</span>
-                </button>
-              </>
-            )}
+            
           </div>
         </div>
       </div>

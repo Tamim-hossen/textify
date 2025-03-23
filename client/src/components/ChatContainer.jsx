@@ -43,7 +43,7 @@ const ChatContainer = () => {
                 </div>
               </div>
               
-              <div className='chat-bubble flex flex-col'>
+              <div className={`max-w-[80%]  rounded-xl p-3 shadow-sm ${message.senderId === authUser._id ? "bg-primary text-primary-content" : "bg-base-300"} flex flex-col`}>
                 {message.image && (
                   <img src={message.image} alt="Image" className='sm:max-w-[200px] rounded-md mb-2'/>
                 )}

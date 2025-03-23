@@ -1,6 +1,9 @@
-import { THEMES } from "../constants";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
 import { useThemeStore } from "../store/useThemeStore";
 import { Send } from "lucide-react";
+import { User, Settings, LogOut,UserRoundX } from "lucide-react";
+import { useChatStore } from "../store/useChatStore";
 
 const PREVIEW_MESSAGES = [
   { id: 1, content: "Hey! How's it going?", isSent: false },
@@ -8,34 +11,46 @@ const PREVIEW_MESSAGES = [
 ];
 
 const SettingsPage = () => {
+  const { authUser, logout } = useAuthStore()
+  const { setSelectedUser } = useChatStore()
   const { theme, setTheme } = useThemeStore();
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
-
+const nav =useNavigate()
   return (
     <div className="h-screen container mx-auto px-4 pt-20 max-w-5xl">
+      {authUser && (<div>
+        <Link to={"/profile"} className=" mt-10 flex flex-row shadow-lg items-center border border-base-300 justify-between p-6 mb-8 bg-base-200 rounded-lg">
+          <p>Profile Settings</p>
+          <span className=" text-sm"><Settings className="size-5" /> </span>
+        </Link>
+        <Link to={"/blocklist"} className=" mt-8 flex flex-row shadow-lg items-center border border-base-300 justify-between p-6 mb-8 bg-base-200 rounded-lg">
+          <p>Blocked Users</p>
+          <span className=" text-sm"><UserRoundX className="size-5" /> </span>
+        </Link>
+      </div>)}
       <div className="space-y-6">
         <div className="flex flex-col gap-1">
-          
+
         </div>
 
         <div className="flex flex-row shadow-lg border border-base-300 justify-between p-6 bg-base-200 rounded-lg">
           <p>Dark Mode:</p>
-  <label className="relative inline-flex items-center cursor-pointer">
-    <input
-      type="checkbox"
-      className="sr-only peer"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <div className="w-14 h-7 bg-gray-300 rounded-full peer-checked:bg-gray-700 transition-colors relative">
-      <div
-        className= {`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md duration-300 transition-all ${theme === 'dark' ? "translate-x-7":"bg-gray-700"}`}
-      />
-    </div>
-  </label>
-</div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={theme === "dark"}
+              onChange={toggleTheme}
+            />
+            <div className="w-14 h-7 bg-gray-300 rounded-full peer-checked:bg-gray-700 transition-colors relative">
+              <div
+                className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md duration-300 transition-all ${theme === 'dark' ? "translate-x-7" : "bg-gray-700"}`}
+              />
+            </div>
+          </label>
+        </div>
 
 
         {/* Preview Section */}
@@ -98,6 +113,7 @@ const SettingsPage = () => {
                     <button className="btn btn-primary h-10 min-h-0">
                       <Send size={18} />
                     </button>
+
                   </div>
                 </div>
               </div>
@@ -105,6 +121,14 @@ const SettingsPage = () => {
           </div>
         </div>
       </div>
+      {authUser && (<div className="pb-8 pt-8">
+
+        <div className="flex flex-row shadow-lg items-center border border-base-300 justify-between p-6 bg-base-200 rounded-lg cursor-pointer" onClick={() => { setSelectedUser(null); logout(); nav("/")  }}>
+          <p>Logout</p>
+          <LogOut className="size-5" />
+        </div>
+      </div>)}
+
     </div>
   );
 };

@@ -19,6 +19,22 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    sentFriendRequests:{
+        type: Array,
+        default: [],
+    },
+    receivedFriendRequests:{
+        type: Array,
+        default: [],
+    },
+    friendsList : {
+        type: Array,
+        default: []
+    },
+    blockList :{
+        type: Array,
+        default: [],
+    }
 }, {timestamps:true})
 
 const User = mongoose.model.User || mongoose.model('User', UserSchema);
